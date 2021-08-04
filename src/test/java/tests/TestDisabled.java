@@ -1,6 +1,5 @@
 package tests;
 
-
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -10,7 +9,7 @@ import utils.Log;
 
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class TestFilling {
+public class TestDisabled {
     private WebDriver driver = Driver.getChromeDriver();
 
     @BeforeAll
@@ -19,10 +18,6 @@ public class TestFilling {
         driver.get("http://a.testaddressbook.com/sign_in");
         String pageTitle = driver.getTitle();
         Assertions.assertEquals("Address Book - Sign In", pageTitle, "Не открыта страница регитрации");
-    }
-
-    @BeforeEach
-    public void enterUserName() {
         driver.findElement(By.xpath("//input[@placeholder='Email']")).sendKeys("sergeybaian@mail.ru");
         driver.findElement(By.xpath("//input[@type='password']")).sendKeys("123321");
         driver.findElement(By.name("commit")).click();
@@ -42,7 +37,7 @@ public class TestFilling {
         driver.findElement(By.xpath("//a[@data-test='create']")).click();
         Log.info("перешли на страницу ввода данных");
         driver.findElement(By.xpath("//div[1]/input[@class='form-control col']")).sendKeys("qwe");
-        driver.findElement(By.id("address_last_name")).sendKeys("eewq");
+        driver.findElement(By.id("address_last_name")).sendKeys("qwe");
         driver.findElement(By.name("address[address1]")).sendKeys("rew");
         driver.findElement(By.id("address_secondary_address")).sendKeys("qwe");
         driver.findElement(By.name("address[city]")).sendKeys("rew");
@@ -68,7 +63,7 @@ public class TestFilling {
         Log.info("Проверяем как записалось LastName");
         WebElement lastname = driver.findElements(By.xpath("//tr/td[2]")).get(0);
         String pageLastName = lastname.getText();
-        Assertions.assertEquals("eewq", pageLastName, "Не записалось LastName");
+        Assertions.assertEquals("qwe", pageLastName, "Не записалось LastName");
         Log.info("Проверяем как записалось City");
         WebElement city = driver.findElements(By.xpath("//tr/td[3]")).get(0);
         String pageCity = city.getText();
@@ -79,6 +74,7 @@ public class TestFilling {
         Assertions.assertEquals("DE", pageState, "Не записалось State");
     }
 
+    @Disabled
     @Test
     @DisplayName("Редактирование адреса")
     public void testChangeAddress() {
@@ -130,16 +126,18 @@ public class TestFilling {
         Assertions.assertEquals("CA", pageState, "Не записалось State");
     }
 
-    @AfterEach
+    @Test
+    @DisplayName("Удаление адреса")
     public void testDeleteAddress() {
         driver.findElement(By.xpath("//tr[1]//a[text()='Destroy']")).click();
         driver.switchTo().alert().accept();
         Log.info("Проверяем удаление адреса");
         WebElement lastname = driver.findElements(By.xpath("//tr/td[2]")).get(0);
         String pageLastName = lastname.getText();
-        Assertions.assertEquals("eewq", pageLastName, "Есть такой адрес");
+        Assertions.assertEquals("qwe", pageLastName, "Есть такой адрес");
     }
 
+    @Disabled
     @Test
     @DisplayName("Выход со страницы")
     public void testOut() {
@@ -161,6 +159,8 @@ public class TestFilling {
 
 
 }
+
+
 
 
 
