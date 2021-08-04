@@ -109,9 +109,10 @@ public class TestOrderTest {
 
 
     }
+
     @Test
     @Order(5)
-    public void delete(){
+    public void delete() {
         driver.get("http://a.testaddressbook.com/sign_in");
         System.out.println("Заполняем поля");
         driver.findElement(By.xpath("//input[@placeholder='Email']")).sendKeys("sergeybaian@mail.ru");
@@ -122,6 +123,7 @@ public class TestOrderTest {
         driver.findElement(By.xpath("//tr[1]//a[text()='Destroy']")).click();
         driver.switchTo().alert().accept();
     }
+
     @Test
     @Order(6)
     public void testOut() {
@@ -132,5 +134,6 @@ public class TestOrderTest {
         driver.findElement(By.name("commit")).click();
         Log.info("Выходим на страницу регистрации");
         driver.findElement(By.xpath("//a[@data-test='sign-out']")).click();
-    driver.quit();}
+        driver.quit();
+    }
 }
