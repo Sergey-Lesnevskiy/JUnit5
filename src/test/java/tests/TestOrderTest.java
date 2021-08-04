@@ -1,55 +1,44 @@
 package tests;
 
-
-
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
-
 import org.junit.jupiter.api.*;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import utils.Driver;
 import utils.Log;
 
-
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-
-public class TestOrder {
+public class TestOrderTest {
     private WebDriver driver = Driver.getChromeDriver();
-@Test
-    @Order(1)
-    public void enterUserName() {
-        Log.info("открываем страницу регистации ивводим пароль");
-        driver.get("http://a.testaddressbook.com/sign_in");
-        String pageTitle = driver.getTitle();
-        Assertions.assertEquals("Address Book - Sign In", pageTitle, "Не открыта страница регитрации");
-        driver.findElement(By.xpath("//input[@placeholder='Email']")).sendKeys("sergeybaian@mail.ru");
-        driver.findElement(By.xpath("//input[@type='password']")).sendKeys("123321");
-        driver.findElement(By.name("commit")).click();
 
-        Log.info("проверяем перешлили мы главную страницу сайта ");
-        String pageHome = driver.getTitle();
-        Assertions.assertEquals("Address Book", pageHome, "Не перешли на главную страницу");
-        Log.info("переходим на страницу просмотров адресов");
-        driver.findElement(By.xpath("//div/a[@data-test='addresses']")).click();
+    @Test
+    @Order(1)
+    public void open() {
+        System.out.println("Открываем страницу");
+        driver.get("http://a.testaddressbook.com/sign_in");
+        driver.close();
     }
+
     @Test
     @Order(2)
-    public void testAddAddress() {
-
-        Log.info("открываем страницу регистации ивводим пароль");
+    public void write() {
         driver.get("http://a.testaddressbook.com/sign_in");
-        String pageTitle = driver.getTitle();
-        Assertions.assertEquals("Address Book - Sign In", pageTitle, "Не открыта страница регитрации");
+        System.out.println("Заполняем поля");
         driver.findElement(By.xpath("//input[@placeholder='Email']")).sendKeys("sergeybaian@mail.ru");
         driver.findElement(By.xpath("//input[@type='password']")).sendKeys("123321");
         driver.findElement(By.name("commit")).click();
+        driver.close();
+    }
 
+    @Test
+    @Order(3)
+    public void fill() {
+        driver.get("http://a.testaddressbook.com/sign_in");
+
+        driver.findElement(By.xpath("//input[@placeholder='Email']")).sendKeys("sergeybaian@mail.ru");
+        driver.findElement(By.xpath("//input[@type='password']")).sendKeys("123321");
+        driver.findElement(By.name("commit")).click();
         Log.info("переходим на страницу добавления адресов");
+        driver.findElement(By.xpath("//div/a[@data-test='addresses']")).click();
         driver.findElement(By.xpath("//a[@data-test='create']")).click();
         Log.info("перешли на страницу ввода данных");
         driver.findElement(By.xpath("//div[1]/input[@class='form-control col']")).sendKeys("qwe");
@@ -70,29 +59,23 @@ public class TestOrder {
         driver.findElement(By.id("address_note")).sendKeys("It's interesting.");
         driver.findElement(By.cssSelector("input[value='Create Address']")).click();
         driver.findElement(By.cssSelector("a[data-test='list']")).click();
-
-        Log.info("Проверяем как записалось FirstName");
-        WebElement firstname = driver.findElements(By.xpath("//tr/td[1]")).get(0);
-        String pageFirstName = firstname.getText();
-        Assertions.assertEquals("qwe", pageFirstName, "FirstName");
-
-        Log.info("Проверяем как записалось LastName");
-        WebElement lastname = driver.findElements(By.xpath("//tr/td[2]")).get(0);
-        String pageLastName = lastname.getText();
-        Assertions.assertEquals("eewq", pageLastName, "Не записалось LastName");
-        Log.info("Проверяем как записалось City");
-        WebElement city = driver.findElements(By.xpath("//tr/td[3]")).get(0);
-        String pageCity = city.getText();
-        Assertions.assertEquals("rew", pageCity, "Не записалось City");
-        Log.info("Проверяем как записалось State");
-        WebElement State = driver.findElements(By.xpath("//tr/td[4]")).get(0);
-        String pageState = State.getText();
-        Assertions.assertEquals("DE", pageState, "Не записалось State");
-        driver.quit();
+        driver.close();
     }
+
     @Test
-    @Order(3)
-    public void testChangeAddress() {
+    @Order(4)
+    public void change() {
+        driver.get("http://a.testaddressbook.com/sign_in");
+
+        driver.findElement(By.xpath("//input[@placeholder='Email']")).sendKeys("sergeybaian@mail.ru");
+        driver.findElement(By.xpath("//input[@type='password']")).sendKeys("123321");
+        driver.findElement(By.name("commit")).click();
+        Log.info("переходим на страницу добавления адресов");
+        driver.findElement(By.xpath("//div/a[@data-test='addresses']")).click();
+        driver.findElement(By.xpath("//a[@data-test='create']")).click();
+        Log.info("перешли на страницу ввода данных");
+
+
         driver.findElement(By.xpath("//tr[1]//a[text()='Edit']")).click();
         driver.findElement(By.id("address_first_name")).clear();
         driver.findElement(By.id("address_first_name")).sendKeys("Sergey");
@@ -122,60 +105,32 @@ public class TestOrder {
         driver.findElement(By.id("address_note")).sendKeys("It's a interesting lesson.");
         driver.findElement(By.cssSelector("input[value='Update Address']")).click();
         driver.findElement(By.cssSelector("a[data-test='list']")).click();
-        Log.info("Проверяем как записалось FirstName");
-        WebElement firstname = driver.findElements(By.xpath("//tr/td[1]")).get(0);
-        String pageFirstName = firstname.getText();
-        Assertions.assertEquals("Sergey", pageFirstName, "FirstName");
+        driver.close();
 
-        Log.info("Проверяем как записалось LastName");
-        WebElement lastname = driver.findElements(By.xpath("//tr/td[2]")).get(0);
-        String pageLastName = lastname.getText();
-        Assertions.assertEquals("Lesnevskiy", pageLastName, "Не записалось LastName");
-        Log.info("Проверяем как записалось City");
-        WebElement city = driver.findElements(By.xpath("//tr/td[3]")).get(0);
-        String pageCity = city.getText();
-        Assertions.assertEquals("Юрика", pageCity, "Не записалось City");
-        Log.info("Проверяем как записалось State");
-        WebElement State = driver.findElements(By.xpath("//tr/td[4]")).get(0);
-        String pageState = State.getText();
-        Assertions.assertEquals("CA", pageState, "Не записалось State");
+
     }
-
-    @Test
-    @Order(4)
-    public void testDeleteAddress() {
-        driver.findElement(By.xpath("//tr[1]//a[text()='Destroy']")).click();
-        driver.switchTo().alert().accept();
-        Log.info("Проверяем удаление адреса");
-        WebElement lastname = driver.findElements(By.xpath("//tr/td[2]")).get(0);
-        String pageLastName = lastname.getText();
-        Assertions.assertEquals("eewq", pageLastName, "Есть такой адрес");
-    }
-
     @Test
     @Order(5)
+    public void delete(){
+        driver.get("http://a.testaddressbook.com/sign_in");
+        System.out.println("Заполняем поля");
+        driver.findElement(By.xpath("//input[@placeholder='Email']")).sendKeys("sergeybaian@mail.ru");
+        driver.findElement(By.xpath("//input[@type='password']")).sendKeys("123321");
+        driver.findElement(By.name("commit")).click();
+
+        driver.findElement(By.xpath("//div/a[@data-test='addresses']")).click();
+        driver.findElement(By.xpath("//tr[1]//a[text()='Destroy']")).click();
+        driver.switchTo().alert().accept();
+    }
+    @Test
+    @Order(6)
     public void testOut() {
+        driver.get("http://a.testaddressbook.com/sign_in");
+        System.out.println("Заполняем поля");
+        driver.findElement(By.xpath("//input[@placeholder='Email']")).sendKeys("sergeybaian@mail.ru");
+        driver.findElement(By.xpath("//input[@type='password']")).sendKeys("123321");
+        driver.findElement(By.name("commit")).click();
         Log.info("Выходим на страницу регистрации");
         driver.findElement(By.xpath("//a[@data-test='sign-out']")).click();
-        String pageTitle2 = driver.getTitle();
-        Assertions.assertEquals("Address Book - Sign In", pageTitle2, "Не открыта страница регитрации");
-    }
-
-@Test
-@Order(6)
-    public void tearDown() {
-
-        Log.info("Закрываем браузер");   driver.quit();}
-
-
-
-
-
-
+    driver.quit();}
 }
-
-
-
-
-
-
